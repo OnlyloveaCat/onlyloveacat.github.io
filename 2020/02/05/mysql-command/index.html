@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="mysql,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文主要介绍mysql常用命令">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql从删库到跑路之常用命令">
+<meta property="og:url" content="http://yoursite.com/2020/02/05/mysql-command/index.html">
+<meta property="og:site_name" content="OnlyloveaCat">
+<meta property="og:description" content="本文主要介绍mysql常用命令">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-04-16T11:24:08.692Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mysql从删库到跑路之常用命令">
+<meta name="twitter:description" content="本文主要介绍mysql常用命令">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/02/05/mysql-command/">
+
+
+
+
+
+  <title>mysql从删库到跑路之常用命令 | OnlyloveaCat</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">OnlyloveaCat</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/05/mysql-command/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="OnlyloveaCat">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/logo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OnlyloveaCat">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">mysql从删库到跑路之常用命令</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-05T00:00:00+08:00">
+                2020-02-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">本文阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文主要介绍mysql常用命令<br><a id="more"></a> </p>
+<h3 id="DQL"><a href="#DQL" class="headerlink" title="DQL"></a>DQL</h3><p>数据查询语言（Data Query Language）：其语句，也称为“数据检索语句”，用以从表中获得数据，确定数据怎样在应用程序给出。保留字SELECT是DQL（也是所有SQL）用得最多的动词，其他DQL常用的保留字有WHERE，ORDER BY，GROUP BY和HAVING。这些DQL保留字常与其它类型的SQL语句一起使用。</p>
+<p>Example：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT name from user; // 查询user表中的name字段</span><br><span class="line">SELECT id,name FROM user;  // 查询user表中的id和name字段</span><br><span class="line">SELECT * FROM user;  // 查询user表中的所有字段</span><br><span class="line">SELECT name AS userName FROM user;  // 查询user表中的name字段以userName作为返回结果(AS可省略)</span><br><span class="line">SELECT CONCAT(id,name) AS newName FROM user;  // 查询user表中的id和name字段并将其拼接为newName字段作为返回结果</span><br><span class="line">SELECT CONCAT(id,name,IFNULL(age,0)) AS output FROM user; // 查询user表中的id,name和age(age为null则视为0)字段并将其拼接为output字段作为返回结果</span><br><span class="line">SELECT DISTINCT id FROM user;  // 查询user表中的id字段并去重</span><br><span class="line">SELECT name FROM user WHERE id=1;  // 查询user表中的id为1的name字段(=,&gt;,&lt;,!=,&lt;&gt;)</span><br><span class="line">SELECT id FROM user WHERE id&gt;=1 AND salary&lt;=10; // 查询user表中的id大于等于1并且小于等于10的id字段(AND,OR,NOT,&amp;&amp;,||,!)</span><br><span class="line">SELECT id FROM user WHERE employee_id BETWEEN 1 AND 10; // 查询user表中的id大于等于1并且小于等于10的id字段(包含两个临界值，并且临界值不能交换顺序)</span><br><span class="line">SELECT name FROM user WHERE name LIKE <span class="string">'%a%'</span>; // 查询user表中的name字段包含a的name字段(%为通配符，表示任意多个字符，包含0个)</span><br><span class="line">SELECT name FROM user WHERE name LIKE <span class="string">'__n_l%'</span>; // 查询user表中的name字段第三个字符为n，第五个字符为l的name字段(_为通配符，表示任意单个字符)</span><br><span class="line">SELECT id FROM user WHERE id IN (1,2,3); // 查询user表中的id字段属于1,2,3列表中的一项的id字段</span><br><span class="line">SELECT age FROM user WHERE age IS NULL;  // 查询user表中的age字段等于NULL的age字段</span><br><span class="line">SELECT age FROM user WHERE age IS NOT NULL;  // 查询user表中的age字段不等于NULL的age字段</span><br><span class="line">SELECT age FROM user WHERE age &lt;=&gt; NULL;  // 查询user表中的age字段等于NULL的age字段</span><br><span class="line">SELECT 2*IFNULL(age,0) AS two_age FROM user;  // 查询user表中的age字段的两倍并将其作为two_age字段返回结果</span><br><span class="line">SELECT * FROM user ORDER BY age DESC;  // 查询user表中的所有字段，并按age降序排列</span><br><span class="line">SELECT * FROM user ORDER BY age ASC;  // 查询user表中的所有字段，并按age升序排列(ASC可省略)</span><br><span class="line">SELECT LENGTH(name) AS name_length,name from user ORDER BY LENGTH(name); // 查询user表中的name字段，将name字段长度作为name_length字段返回，并按name字段长度进行升序排列</span><br><span class="line">SELECT *  FROM user ORDER BY age ASC, id DESC; // 查询user表中的所有字段，并按age升序和id降序排列，以前者为主</span><br><span class="line">SELECT UPPER(name) AS new_name FROM user; // 查询user表中的name字段转成大写，并以new_name作为返回结果</span><br><span class="line">SELECT LOWER(name) AS new_name FROM user; // 查询user表中的name字段转成小写，并以new_name作为返回结果</span><br><span class="line">SELECT SUBSTR(name,1,3) AS new_name user; // 查询user表中的name字段并截取从索引1处字符长度为3的字符，并作为new_name字段作为返回结果(不指定长度则为所有)</span><br><span class="line">SELECT INSTR(name,<span class="string">'a'</span>) AS a_index FROM  user; // 查询user表中的name字段中字符串a第一次出现的索引，并以a_index作为返回结果</span><br><span class="line">SELECT TRIM(name) AS new_name FROM user; // 查询user表中的name字段，去除前后空格并作为new_name字段返回</span><br><span class="line">SELECT TRIM(<span class="string">'a'</span> FROM name) AS new_name FROM user; // 查询user表中的name字段，去除前后字符串a并作为new_name字段返回</span><br><span class="line">SELECT LPAD(name,10,<span class="string">'*'</span>) AS new_name FROM user; // 查询user表中的name字段，以字符*左填充至10位，并作为new_name字段返回</span><br><span class="line">SELECT RPAD(name,10,<span class="string">'*'</span>) AS new_name FROM user; // 查询user表中的name字段，以字符*右填充至10位，并作为new_name字段返回</span><br><span class="line">SELECT REPLACE(name,<span class="string">'a'</span>,<span class="string">'b'</span>) AS new_name FROM user; // 查询user表中的name字段，将其中的a替换为b，并作为new_name字段返回</span><br><span class="line">SELECT ROUND(money,2) AS new_money FROM user; // 查询user表中的money字段进行四舍五入保留两位小数，并作为new_money字段返回(不写第二个参数则为整数)</span><br><span class="line">SELECT CEIL(money) AS new_money FROM user; // 查询user表中的money字段向上取整，并作为new_money字段返回</span><br><span class="line">SELECT FLOOR(money) AS new_money FROM user; // 查询user表中的money字段向下取整，并作为new_money字段返回</span><br><span class="line">SELECT TRUNCATE(money,1) AS new_money FROM user; // 查询user表中的money字段截断保留一位小数，并作为new_money字段返回</span><br><span class="line">SELECT MOD(money,30) AS new_money FROM user; // 查询user表中的money字段除以30取余，并作为new_money字段返回</span><br><span class="line">SELECT NOW(); // 返回当前系统日期时间</span><br><span class="line">SELECT CURDATE(); // 返回当前系统日期，不包含时间</span><br><span class="line">SELECT CURTIME(); // 返回当前系统时间，不包含日期</span><br><span class="line">SELECT YEAR(NOW()); // 返回当前系统年份</span><br><span class="line">SELECT MONTH(NOW()); // 返回当前系统月份(数字)</span><br><span class="line">SELECT MONTHNAME(NOW()); // 返回当前系统月份(英文)</span><br><span class="line">SSELECT STR_TO_DATE(NOW(),<span class="string">'%Y-%c-%d'</span>); // 以%Y-%c-%d  格式返回当前系统日期(%Y：四位年份，%y：两位年份，...)</span><br><span class="line">SELECT DATE_FORMAT(NOW(),<span class="string">'%Y年%c月%d日'</span>); // 返回当前系统日期并转换为%Y年%c月%d日格式</span><br><span class="line">SELECT DATEDIFF(NOW(),<span class="string">'1998-7-18'</span>); // 返回当前系统日期距离1997-7-18的天数</span><br><span class="line">SELECT VERSION(); // 查看数据库版本号</span><br><span class="line">SELECT DATABASE(); // 查看当前数据库</span><br><span class="line">SELECT USER(); // 查看当前登录用户</span><br><span class="line">SELECT name,money,IF(money IS NULL,<span class="string">'有钱'</span>,<span class="string">'没钱'</span>) AS money_text FROM user; // 查询user表中的name,money字段并判断有没有钱，并作为money_text字段返回</span><br><span class="line">SELECT money,id, CASE id WHEN 30 THEN money*1.5 ELSE money END AS new_money FROM user; // 查询user表中的id,money字段并判断id是否为30，是则对应得money*1.5否则直接返回，并作为new_money字段返回</span><br><span class="line">SELECT money, CASE WHEN money&gt;2000 THEN <span class="string">'A'</span> WHEN money&gt;15000 THEN <span class="string">'B'</span> ELSE <span class="string">'C'</span> END AS money_star FROM user; // 查询user表中的name,money字段并根据大小评级，并作为money_star字段返回</span><br><span class="line">SELECT SUM(money) FROM user;  // 查询user表中的money总和(SUM:总和,AVG:平均值,MAX:最大值,MIN:最小值,COUNT:总数)</span><br><span class="line">SELECT MAX(money),age FROM user GROUP BY age; // 查询user表中的money字段，根据age分组计算最大值并返回</span><br><span class="line">SELECT COUNT(*),age FROM user GROUP BY age HAVING COUNT(*)&gt;2; // 查询user表中的age字段，根据age分组并计算相应的总和，同事筛选出总数大于2的字段返回</span><br><span class="line">SELECT name,job FROM user,<span class="built_in">jobs</span> WHERE user.job_id=jobs.id; // 查询user表中的name字段并关联<span class="built_in">jobs</span>表中的job字段</span><br><span class="line">SELECT name,job FROM user u INNER JOIN <span class="built_in">jobs</span> j ON u.job_id=j.id; // 查询user表中的name字段并关联<span class="built_in">jobs</span>表中的job字段(INNER可以省略)</span><br><span class="line">SELECT name,job FROM user u LEFT OUTER JOIN <span class="built_in">jobs</span> j ON u.job_id=j.id WHERE j.id IS NULL; // 查询user表中的name字段并关联<span class="built_in">jobs</span>表中的job字段没有则为NULL，然后筛选job为NULL的字段</span><br><span class="line">SELECT name,job FROM <span class="built_in">jobs</span> j RIGHT OUTER JOIN user u ON u.job_id=j.id WHERE j.id IS NULL; // 查询user表中的name字段并关联<span class="built_in">jobs</span>表中的job字段没有则为NULL，然后筛选job为NULL的字段</span><br><span class="line">SELECT name,job FROM user u CROSS JOIN <span class="built_in">jobs</span> j; // 查询user表和<span class="built_in">jobs</span>表的所有交叉集name和job字段</span><br><span class="line">SELECT * FROM user WHERE age&gt;(SELECT age FROM user WHERE name=<span class="string">'Abel'</span>); // 查询user表中age大于name为Abel的所有字段</span><br><span class="line">SELECT MIN(money),name FROM user GROUP BY age HAVING MIN(money)&gt;(SELECT MIN(money) FROM user WHERE age=50); // 查询user表中每个年龄分段的最小money大于age为50分段最小money最小money和name字段</span><br><span class="line">SELECT job_name FROM job j WHERE EXISTS (SELECT * FROM user u WHERE u.job_id=j.id); // 查询job中分配员工的工种job_name字段</span><br><span class="line">SELECT job_name FROM job j WHERE j.id IN (SELECT job_id FROM user); // 查询job中分配员工的工种job_name字段</span><br><span class="line">SELECT * FROM user LIMIT 0,5; // 查询user表中从索引0开始的5条信息(索引为0时可省略)</span><br><span class="line">SELECT * FROM user WHERE name LIKE <span class="string">'%a%'</span> UNION SELECT * FROM user WHERE id&gt;90; // 查询user表中name字段包含a的信息和user表中id大于90的信息合并(UNION默认去重，UNION ALL可以包含重复项)</span><br></pre></td></tr></table></figure>
+<h3 id="DML"><a href="#DML" class="headerlink" title="DML"></a>DML</h3><p>数据操作语言（Data Manipulation Language）：其语句包括动词INSERT、UPDATE和DELETE。它们分别用于添加、修改和删除。</p>
+<p>Example：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">INSERT INTO user(id,name,age,money)VALUES(13,<span class="string">'Pick'</span>,18,NULL),(14,<span class="string">'Anda'</span>,24,500); // 向user表中插入两行对应字段的数据(字段名可省略，省略默认为所有字段)</span><br><span class="line">INSERT INTO user SET id=15,name=<span class="string">'Paker'</span>,age=27,money=20; // 向user表中插入一行对应字段的数据</span><br><span class="line">INSERT INTO user(id,name,age,money) SELECT 16,<span class="string">'Anna'</span>,15,7; // 向user表中插入一行对应字段的数据</span><br><span class="line">UPDATE user SET age=30,money=3000 WHERE name LIKE <span class="string">'唐%'</span>; // 更改user表中name以唐开头的信息中age字段为30，money字段为3000</span><br><span class="line">UPDATE user u INNER JOIN <span class="built_in">jobs</span> j ON j.id=u.job_id SET u.money=200 WHERE j.job_name=<span class="string">'IT'</span>; // 更改user表中job_id与<span class="built_in">jobs</span>中的id相同并且job_name为IT的money字段为200</span><br><span class="line">DELETE FROM user WHERE phone LIKE <span class="string">'%9'</span>; // 删除user表中phone字段以9结尾的信息</span><br><span class="line">DELETE u FROM user u INNER JOIN <span class="built_in">jobs</span> j ON u.job_id=j.id WHERE j.job_name=<span class="string">'IT'</span>; // 删除user表中的job_id与job表中的id相同并且job_name为IT的</span><br><span class="line">TRUNCATE TABLE <span class="built_in">jobs</span>; // 清空<span class="built_in">jobs</span>表(TRUNCATE不能回滚，DELETE可以回滚)</span><br></pre></td></tr></table></figure>
+<h3 id="DDL"><a href="#DDL" class="headerlink" title="DDL"></a>DDL</h3><p>数据定义语言（DDL）：其语句包括动词CREATE,ALTER和DROP。在数据库中创建新表或修改、删除表（CREAT TABLE 或 DROP TABLE）；为表加入索引等。</p>
+<p>Example：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">CREATE DATABASE books; // 创建books数据库(如果books数据库已存在则报错)</span><br><span class="line">CREATE DATABASE IF NOT EXISTS books; // 如果books数据库不存在则创建books数据库(如果books数据库已存在不会报错)</span><br><span class="line">ALTER DATABASE books CHARACTER SET gbk; // 设置books数据库的字符集为gbk</span><br><span class="line">DROP DATABASE books; // 删除books数据库(如果books数据库不存在则报错)</span><br><span class="line">DROP DATABASE IF EXISTS books; // 如果books数据库存在则删除books数据库(如果books数据库不存在不会报错)</span><br><span class="line">CREATE TABLE book(id INT,bName VARCHAR(20),price DOUBLE,authorId INT,publishDate DATETIME); // 创建book表并设置字段id为INT类型，bName为VARCHAR(20)类型，price为DOUBLE类型，authorId为INT类型，publishDate为DATETIME类型</span><br><span class="line">CREATE TABLE author(id INT,au_name VARCHAR(20),nation VARCHAR(10)); // 创建author表并设置字段id为INT类型，au_name为VARCHAR(20)类型，nation为VARCHAR(10)类型</span><br><span class="line">ALTER TABLE book CHANGE COLUMN publishDate pubDate DATETIME; // 修改book表中的publishDate字段为pubDate</span><br><span class="line">ALTER TABLE book MODIFY COLUMN pubDate TIMESTAMP; // 修改book表中的pubDate字段的类型为TIMESTAMP</span><br><span class="line">ALTER TABLE author ADD COLUMN annual DOUBLE; // 向author表中的添加annual字段并设置为DOUBLE类型</span><br><span class="line">ALTER TABLE author DROP COLUMN annual; // 删除author表中的annual字段</span><br><span class="line">ALTER TABLE author RENAME TO book_author; // 修改author表名为book_author</span><br><span class="line">DROP TABLE book_author; // 删除book_author表(如果book_author表不存在则报错)</span><br><span class="line">DROP TABLE IF EXISTS book_author;// 如果book_author表存在则删除book_author表(如果book_author表不存在则不会报错)</span><br><span class="line">CREATE TABLE copy LIKE author; // 复制author表的结构并创建一张名为copy的新表</span><br><span class="line">CREATE TABLE copy2 SELECT * FROM author; // 复制author表的结构和数据并创建一张名为copy2的新表</span><br><span class="line">CREATE TABLE IF NOT EXISTS stuinfo(id INT PRIMARY KEY, stuName VARCHAR(20) NOT NULL,gender CHAR(1),age INT DEFAULT 18,seat INT UNIQUE,majorId INT,CONSTRAINT fk_stuinfo_major FOREIGN KEY(majorId) REFERENCES major(id)); // 创建stuinfo表并添加约束字段(id为INT类型主键，stuName为VARCHAR(20)类型不为空，gender为CHAR(1)类型，age为INT类型默认18，seat为INT类型唯一，majorId为INT类型外键，关联major表中的id)</span><br><span class="line">SHOW INDEX FROM stuinfo; // 查看stuinfo表中所有的索引</span><br><span class="line">ALTER TABLE stuinfo MODIFY COLUMN stuName VARCHAR(20) NOT NULL; // 修改stuinfo表中的stuName字段类型为VARCHAR(20)并且添加不为空的约束</span><br><span class="line">ALTER TABLE stuinfo ADD UNIQUE(stuName); // 修改stuinfo表中的stuName字段添加唯一约束</span><br><span class="line">ALTER TABLE stuinfo DROP PRIMARY KEY; // 删除stuinfo表中主键</span><br><span class="line">ALTER TABLE stuinfo DROP INDEX seat; // 删除stuinfo表中索引为seat的约束</span><br><span class="line">ALTER TABLE stuinfo DROP FOREIGN KEY fk_stuinfo_major; // 删除stuinfo表中索引为fk_stuinfo_major的外键</span><br><span class="line">CREATE TABLE tab_identity(id INT PRIMARY KEY AUTO_INCREMENT,name VARCHAR(20)); // 创建tab_identity表并添加约束字段(id为INT类型自增主键，name为VARCHAR(20)类型)</span><br></pre></td></tr></table></figure>
+<h3 id="TCL"><a href="#TCL" class="headerlink" title="TCL"></a>TCL</h3><p>事务控制语言（TCL）：它的语句能确保被DML语句影响的表的所有行及时得以更新。包括COMMIT（提交）命令、SAVEPOINT（保存点）命令、ROLLBACK（回滚）命令。</p>
+<p>Example：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SHOW ENGINES; // 查询mysql的存储引擎</span><br><span class="line"></span><br><span class="line">SET autocommit=0; // 关闭自动提交</span><br><span class="line">START TRANSACTION; // 开启事务(可省略)</span><br><span class="line">UPDATE user SET money=500 WHERE username=<span class="string">'Anna'</span>;</span><br><span class="line">UPDATE user SET money=1500 WHERE username=<span class="string">'Pick'</span>;</span><br><span class="line"></span><br><span class="line">COMMIT; // 提交事务</span><br><span class="line">SET autocommit=0; // 关闭自动提交</span><br><span class="line">START TRANSACTION; // 开启事务(可省略)</span><br><span class="line">UPDATE user SET money=1000 WHERE username=<span class="string">'Anna'</span>;</span><br><span class="line">UPDATE user SET money=1000 WHERE username=<span class="string">'Pick'</span>;</span><br><span class="line">ROLLBACK; // 回滚事务</span><br><span class="line"></span><br><span class="line">SET autocommit=0; // 关闭自动提交</span><br><span class="line">START TRANSACTION; // 开启事务(可省略)</span><br><span class="line">DELETE FROM account WHERE id=25;</span><br><span class="line">SAVEPOINT a; // 设置回滚点a</span><br><span class="line">DELETE FROM account WHERE id=28;</span><br><span class="line">ROLLBACK TO a; // 回滚到a点</span><br></pre></td></tr></table></figure>
+<h3 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h3><p>Example：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">CREATE VIEW v1 AS SELECT stuName,majorName FROM  stuinfo s INNER JOIN major m ON s.majorid=m.id; // 将查询逻辑创建为视图v1</span><br><span class="line">CREATE OR REPLACE VIEW myv1 AS SELECT AVG(salary),job_id FROM employees GROUP BY jobas_id; // 将查询逻辑创建或替换为视图v1</span><br><span class="line">ALTER VIEW myv1 AS SELECT * FROM employees; // 修改视图myv1</span><br><span class="line">DROP VIEW myv1; // 删除视图myv1</span><br></pre></td></tr></table></figure>
+<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><p>Example：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SHOW GLOBAL VARIABLES; // 查看所有的全局变量 </span><br><span class="line">SELECT @@GLOBAL.autocommit; // 查看全局变量autocommit</span><br><span class="line">SET @@GLOBAL.autocommit=0; // 设置全局变量autocommit为0</span><br><span class="line">SHOW SESSION VARIABLES; // 查看所有会话变量</span><br><span class="line">SELECT @@SESSION.autocommit; // 查看会话变量autocommit</span><br><span class="line">SET @@SESSION.autocommit=0; // 设置会话变量autocommit为0</span><br><span class="line">SET @name=<span class="string">'john'</span>; // 设置用户变量</span><br><span class="line">SELECT COUNT(*) INTO @count FROM <span class="built_in">jobs</span>; // 设置用户变量count</span><br><span class="line">SELECT @count; // 查询用户变量count</span><br><span class="line">SET @m=1; // 设置局部变量m为1</span><br><span class="line">DECLARE n INT DEFAULT 1; // 设置局部变量n默认为1</span><br></pre></td></tr></table></figure>
+<!-- ### DCL
+
+数据控制语言（DCL）：它的语句通过GRANT或REVOKE实现权限控制，确定单个用户和用户组对数据库对象的访问。某些RDBMS可用GRANT或REVOKE控制对表单个列的访问。
+
+Example：
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="CCL"><a href="#CCL" class="headerlink" title="CCL"></a>CCL</h3><p>指针控制语言（CCL）：它的语句，像DECLARE CURSOR，FETCH INTO和UPDATE WHERE CURRENT用于对一个或多个表单独行的操作。</p>
+<p>Example：</p>
+<p><code>`</code> bash</p>
+<p><code>`</code> –&gt;</p>
+-->
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>扫一扫，请老师喝水</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wx.jpg" alt="OnlyloveaCat 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/zfb.jpg" alt="OnlyloveaCat 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/22/ssh-ServerAliveInterval/" rel="next" title="解决MAC终端SSH链接远程服务器，空闲断线的方法">
+                <i class="fa fa-chevron-left"></i> 解决MAC终端SSH链接远程服务器，空闲断线的方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/24/css-flex/" rel="prev" title="CSS之Flex布局">
+                CSS之Flex布局 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/logo.jpg" alt="OnlyloveaCat">
+            
+              <p class="site-author-name" itemprop="name">OnlyloveaCat</p>
+              <p class="site-description motion-element" itemprop="description">不求闻达于诸侯</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/OnlyloveaCat" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#DQL"><span class="nav-number">1.</span> <span class="nav-text">DQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DML"><span class="nav-number">2.</span> <span class="nav-text">DML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DDL"><span class="nav-number">3.</span> <span class="nav-text">DDL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCL"><span class="nav-number">4.</span> <span class="nav-text">TCL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#视图"><span class="nav-number">5.</span> <span class="nav-text">视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量"><span class="nav-number">6.</span> <span class="nav-text">变量</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">OnlyloveaCat</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+    <span class="site-uv">
+      本站访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 代码块复制功能 -->
+  <script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+  <script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+</html>

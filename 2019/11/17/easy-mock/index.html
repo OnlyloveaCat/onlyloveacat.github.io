@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Mock,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文主要如何本地搭建Easy-Mock">
+<meta name="keywords" content="Mock">
+<meta property="og:type" content="article">
+<meta property="og:title" content="本地搭建Easy-Mock">
+<meta property="og:url" content="http://yoursite.com/2019/11/17/easy-mock/index.html">
+<meta property="og:site_name" content="OnlyloveaCat">
+<meta property="og:description" content="本文主要如何本地搭建Easy-Mock">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-04-16T11:24:08.692Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="本地搭建Easy-Mock">
+<meta name="twitter:description" content="本文主要如何本地搭建Easy-Mock">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/11/17/easy-mock/">
+
+
+
+
+
+  <title>本地搭建Easy-Mock | OnlyloveaCat</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">OnlyloveaCat</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/17/easy-mock/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="OnlyloveaCat">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/logo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OnlyloveaCat">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">本地搭建Easy-Mock</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-17T00:00:00+08:00">
+                2019-11-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mock/" itemprop="url" rel="index">
+                    <span itemprop="name">Mock</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">本文阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文主要如何本地搭建Easy-Mock<br><a id="more"></a></p>
+<h3 id="1前置条件"><a href="#1前置条件" class="headerlink" title="1前置条件"></a>1前置条件</h3><p>首先需要安装Easy-Mock所需要的环境，自行Google</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Node.js（v8.x, 不支持 v10.x）</span><br><span class="line">MongoDB（&gt;= v3.4）</span><br><span class="line">Redis（&gt;= v4.0）</span><br></pre></td></tr></table></figure>
+<h3 id="2拉去Easy-Mock源码并安装"><a href="#2拉去Easy-Mock源码并安装" class="headerlink" title="2拉去Easy-Mock源码并安装"></a>2拉去Easy-Mock源码并安装</h3><p>执行如下代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/easy-mock/easy-mock.git</span><br><span class="line"><span class="built_in">cd</span> easy-mock &amp;&amp; npm install</span><br></pre></td></tr></table></figure>
+<h3 id="3修改配置文件"><a href="#3修改配置文件" class="headerlink" title="3修改配置文件"></a>3修改配置文件</h3><p>找到 config/default.json</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"port"</span>: 7300,</span><br><span class="line">  <span class="string">"host"</span>: <span class="string">"0.0.0.0"</span>,</span><br><span class="line">  <span class="string">"pageSize"</span>: 30,</span><br><span class="line">  <span class="string">"proxy"</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="string">"db"</span>: <span class="string">"mongodb://admin:123456@localhost:27017/easymockdb?authSource=admin"</span>, // mongodb://用户名:密码@mongodb地址:mongodb端口/项目所用库名?authSource=admin</span><br><span class="line">  <span class="string">"unsplashClientId"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="string">"redis"</span>: &#123;</span><br><span class="line">    <span class="string">"keyPrefix"</span>: <span class="string">"[Easy Mock]"</span>,</span><br><span class="line">    <span class="string">"port"</span>: 6379, // redis端口号</span><br><span class="line">    <span class="string">"host"</span>: <span class="string">"localhost"</span>, // redis地址</span><br><span class="line">    <span class="string">"password"</span>: <span class="string">""</span>,</span><br><span class="line">    <span class="string">"db"</span>: 0</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"blackList"</span>: &#123;</span><br><span class="line">    <span class="string">"projects"</span>: [], // projectId，例：<span class="string">"5a4495e16ef711102113e500"</span></span><br><span class="line">    <span class="string">"ips"</span>: [] // ip，例：<span class="string">"127.0.0.1"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"rateLimit"</span>: &#123; // https://github.com/koajs/ratelimit</span><br><span class="line">    <span class="string">"max"</span>: 1000,</span><br><span class="line">    <span class="string">"duration"</span>: 1000</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"jwt"</span>: &#123;</span><br><span class="line">    <span class="string">"expire"</span>: <span class="string">"14 days"</span>,</span><br><span class="line">    <span class="string">"secret"</span>: <span class="string">"shared-secret"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"upload"</span>: &#123;</span><br><span class="line">    <span class="string">"types"</span>: [<span class="string">".jpg"</span>, <span class="string">".jpeg"</span>, <span class="string">".png"</span>, <span class="string">".gif"</span>, <span class="string">".json"</span>, <span class="string">".yml"</span>, <span class="string">".yaml"</span>],</span><br><span class="line">    <span class="string">"size"</span>: 5242880,</span><br><span class="line">    <span class="string">"dir"</span>: <span class="string">"../public/upload"</span>,</span><br><span class="line">    <span class="string">"expire"</span>: &#123;</span><br><span class="line">      <span class="string">"types"</span>: [<span class="string">".json"</span>, <span class="string">".yml"</span>, <span class="string">".yaml"</span>],</span><br><span class="line">      <span class="string">"day"</span>: -1</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"ldap"</span>: &#123;</span><br><span class="line">    <span class="string">"server"</span>: <span class="string">""</span>, // 设置 server 代表启用 LDAP 登录。例：<span class="string">"ldap://localhost:389"</span> 或 <span class="string">"ldaps://localhost:389"</span>（使用 SSL）</span><br><span class="line">    <span class="string">"bindDN"</span>: <span class="string">""</span>, // 用户名，例：<span class="string">"cn=admin,dc=example,dc=com"</span></span><br><span class="line">    <span class="string">"password"</span>: <span class="string">""</span>,</span><br><span class="line">    <span class="string">"filter"</span>: &#123;</span><br><span class="line">      <span class="string">"base"</span>: <span class="string">""</span>, // 查询用户的路径，例：<span class="string">"dc=example,dc=com"</span></span><br><span class="line">      <span class="string">"attributeName"</span>: <span class="string">""</span> // 查询字段，例：<span class="string">"mail"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"fe"</span>: &#123;</span><br><span class="line">    <span class="string">"copyright"</span>: <span class="string">""</span>,</span><br><span class="line">    <span class="string">"storageNamespace"</span>: <span class="string">"easy-mock_"</span>,</span><br><span class="line">    <span class="string">"timeout"</span>: 25000,</span><br><span class="line">    <span class="string">"publicPath"</span>: <span class="string">"/dist/"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3启动"><a href="#3启动" class="headerlink" title="3启动"></a>3启动</h3><p>执行如下代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">npm run dev</span><br></pre></td></tr></table></figure>
+<h3 id="3部署"><a href="#3部署" class="headerlink" title="3部署"></a>3部署</h3><p>执行如下代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">npm run build </span><br><span class="line">pm2 start app.js // 安装pm2守护进程，pm2使用请参照pm2使用手册</span><br></pre></td></tr></table></figure>
+<p>pm2教程：<a href="/2019/09/16/pm2/" title="pm2使用手册">pm2使用手册</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>扫一扫，请老师喝水</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wx.jpg" alt="OnlyloveaCat 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/zfb.jpg" alt="OnlyloveaCat 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Mock/" rel="tag"># Mock</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/01/js-export/" rel="next" title="JS接收服务端流文件">
+                <i class="fa fa-chevron-left"></i> JS接收服务端流文件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/29/classList/" rel="prev" title="H5新增属性classList的用法">
+                H5新增属性classList的用法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/logo.jpg" alt="OnlyloveaCat">
+            
+              <p class="site-author-name" itemprop="name">OnlyloveaCat</p>
+              <p class="site-description motion-element" itemprop="description">不求闻达于诸侯</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/OnlyloveaCat" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1前置条件"><span class="nav-number">1.</span> <span class="nav-text">1前置条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2拉去Easy-Mock源码并安装"><span class="nav-number">2.</span> <span class="nav-text">2拉去Easy-Mock源码并安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3修改配置文件"><span class="nav-number">3.</span> <span class="nav-text">3修改配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3启动"><span class="nav-number">4.</span> <span class="nav-text">3启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3部署"><span class="nav-number">5.</span> <span class="nav-text">3部署</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">OnlyloveaCat</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+    <span class="site-uv">
+      本站访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 代码块复制功能 -->
+  <script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+  <script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+</html>

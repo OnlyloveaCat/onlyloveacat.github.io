@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JavaScript,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文主要介绍支付宝IoT小程序的开发流程">
+<meta name="keywords" content="JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="支付宝IoT小程序开发指南">
+<meta property="og:url" content="http://yoursite.com/2020/03/28/iot/index.html">
+<meta property="og:site_name" content="OnlyloveaCat">
+<meta property="og:description" content="本文主要介绍支付宝IoT小程序的开发流程">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-04-16T11:24:08.692Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="支付宝IoT小程序开发指南">
+<meta name="twitter:description" content="本文主要介绍支付宝IoT小程序的开发流程">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/28/iot/">
+
+
+
+
+
+  <title>支付宝IoT小程序开发指南 | OnlyloveaCat</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">OnlyloveaCat</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/28/iot/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="OnlyloveaCat">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/logo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OnlyloveaCat">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">支付宝IoT小程序开发指南</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-28T00:00:00+08:00">
+                2020-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">本文阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文主要介绍支付宝IoT小程序的开发流程<br><a id="more"></a> </p>
+<h3 id="1简介"><a href="#1简介" class="headerlink" title="1简介"></a>1简介</h3><p>支付宝IoT小程序：是指投放到iot端的支付宝小程序，目前只有蜻蜓系列设备支持开发和运行支付宝IoT小程序。<br>支付宝IoT小程序 是实现IoT设备二次开发的一种方法。类似支付宝小程序，IoT小程序开放了一系列的API和组件，并且IoT小程序与支付宝小程序共享一个容器和一套消息，共享大部分组件。开发者可以快速开发一个IoT小程序，定制IoT设备功能，满足各行业个性化的需求。<br>IoT 小程序分为IoT单屏小程序和IoT双屏小程序，分别对应只有一个显示屏幕和具有前后两个屏幕的IoT设备。</p>
+<p>注：由于博主在写这篇文章的时候，支付宝Iot双屏小程序还没有正式开放，所以一下内容只是针对单屏小程序，双屏可能不支持。并且IoT小程序暂不支持模板开发。</p>
+<h3 id="2开发准备"><a href="#2开发准备" class="headerlink" title="2开发准备"></a>2开发准备</h3><h4 id="企业号申请入驻"><a href="#企业号申请入驻" class="headerlink" title="企业号申请入驻"></a>企业号申请入驻</h4><p>具体流程参考<a href="https://opendocs.alipay.com/mini/introduce/register" target="_blank" rel="noopener">支付宝开放平台文档</a>，目前支付宝 IoT 小程序仅支持企业账号发布，个人账户可以用于开发和调试，但不能提审和发布。</p>
+<h4 id="购买蜻蜓设备"><a href="#购买蜻蜓设备" class="headerlink" title="购买蜻蜓设备"></a>购买蜻蜓设备</h4><p>你瞅啥？此处无银三百两，<a href="https://open.alipay.com/svr/iot" target="_blank" rel="noopener">自己看去</a></p>
+<h4 id="创建IoT小程序"><a href="#创建IoT小程序" class="headerlink" title="创建IoT小程序"></a>创建IoT小程序</h4><p>创建支付宝小程序并在小程序后台开通支付宝IoT端发布（在支付宝开放平台的 小程序列表 中找到相应小程序点击 查看 进入小程序详情页，点击 设置 &gt; 多端发布支持 ，找到 支付宝IoT 端，点击 开通 </p>
+<h4 id="下载安装IDE"><a href="#下载安装IDE" class="headerlink" title="下载安装IDE"></a>下载安装IDE</h4><p>下载并安装<a href="https://opendocs.alipay.com/mini/ide/download" target="_blank" rel="noopener">小程序开发者工具</a></p>
+<ol>
+<li>打开小程序开发者工具，点击+新建项目。</li>
+<li>确保左侧栏选中的是 支付宝IoT-&gt;小程序，进行快速创建，点击 下一步。</li>
+<li>填写 项目名称、项目路径，点击 完成 。</li>
+<li>在开发者工具右侧模拟器预览小程序效果。至此IoT小程序已创建完成。</li>
+<li>使用手机支付宝扫码登录开发者工具，并允许关联支付宝小程序。（登录手机号必须有该小程序的开发权限，否则将无法进行关联）</li>
+</ol>
+<h3 id="3开发调试"><a href="#3开发调试" class="headerlink" title="3开发调试"></a>3开发调试</h3><h4 id="适用API"><a href="#适用API" class="headerlink" title="适用API"></a>适用API</h4><p>IoT小程序也支持使用部分支付宝小程序的通用组件/API，同时还有部分IoT小程序独有的API（具体参考<a href="https://opendocs.alipay.com/mini/multi-platform/iftqqu" target="_blank" rel="noopener">支付宝开发平台文档</a>）。<br>IoT所属API需要在真机上调用。</p>
+<h4 id="绑定真机调试"><a href="#绑定真机调试" class="headerlink" title="绑定真机调试"></a>绑定真机调试</h4><ol>
+<li>蜻蜓设备开机并连接蓝牙键盘</li>
+<li>长按电源键进入系统 设置 页，点击 关于本机 ，再连续点击8次 小程序容器 打开小程序配置，进入 支付宝IoT小程序设置 页面，点击 进入开发者模式。</li>
+<li>在页面底部点击 添加开发小程序，填入小程序 APPID 并提交（此时蜻蜓设备可以被IDE识别为在线状态，IoT小程序可以推送到设备上进行调试）。</li>
+<li>打开IDE并绑定该设备。（调试时，设备需要停留在 开发者模式 页面下，否则小程序可能无法推送到设备上进行调试。）</li>
+<li>代码编辑之后可以点击推送或预览，在真机上进行调试。</li>
+</ol>
+<h3 id="4审核上线"><a href="#4审核上线" class="headerlink" title="4审核上线"></a>4审核上线</h3><p>小程序开发完成之后，在IDE中点击上传，上传小程序到 开放平台，并进入小程序详情页，点击 支付宝 IoT 页签 &gt; 提交审核 &gt; 确认。<br>小程序审核将会使用真机进行测试。为确保审核小二能够正常使用小程序，如果小程序代码中有设备绑定逻辑，需要提前将部分设备号加入绑定名单，以便顺利审核。（详情参考<a href="https://opendocs.alipay.com/mini/multi-platform/vf23al" target="_blank" rel="noopener">支付宝开发平台文档</a>）</p>
+<h3 id="5服务分发"><a href="#5服务分发" class="headerlink" title="5服务分发"></a>5服务分发</h3><p>设备所有者账号登录 支付宝开放平台-&gt;业务中心-&gt;智能设备-&gt;服务分发。<br>在服务分发中选择对应的小程序 分发到设备，点击机型旁边的漏斗进行筛选（默认不展示全部机具），选机具并分发到设备。</p>
+<p>分发条件：a、必须是IoT小程序；b、分发操作账号必须是设备所有者或者是被邀约合作账号。</p>
+<p>已分发的机器重置到原生应用：点击 服务分发-&gt;分发指南-&gt;点此重置到支付宝盒</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>扫一扫，请老师喝水</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wx.jpg" alt="OnlyloveaCat 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/zfb.jpg" alt="OnlyloveaCat 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/11/node-puppeteer/" rel="next" title="基于NodeJs的Chrome脚本神器Puppeteer">
+                <i class="fa fa-chevron-left"></i> 基于NodeJs的Chrome脚本神器Puppeteer
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/logo.jpg" alt="OnlyloveaCat">
+            
+              <p class="site-author-name" itemprop="name">OnlyloveaCat</p>
+              <p class="site-description motion-element" itemprop="description">不求闻达于诸侯</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/OnlyloveaCat" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1简介"><span class="nav-number">1.</span> <span class="nav-text">1简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2开发准备"><span class="nav-number">2.</span> <span class="nav-text">2开发准备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#企业号申请入驻"><span class="nav-number">2.1.</span> <span class="nav-text">企业号申请入驻</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#购买蜻蜓设备"><span class="nav-number">2.2.</span> <span class="nav-text">购买蜻蜓设备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建IoT小程序"><span class="nav-number">2.3.</span> <span class="nav-text">创建IoT小程序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#下载安装IDE"><span class="nav-number">2.4.</span> <span class="nav-text">下载安装IDE</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3开发调试"><span class="nav-number">3.</span> <span class="nav-text">3开发调试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#适用API"><span class="nav-number">3.1.</span> <span class="nav-text">适用API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#绑定真机调试"><span class="nav-number">3.2.</span> <span class="nav-text">绑定真机调试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4审核上线"><span class="nav-number">4.</span> <span class="nav-text">4审核上线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5服务分发"><span class="nav-number">5.</span> <span class="nav-text">5服务分发</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">OnlyloveaCat</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+    <span class="site-uv">
+      本站访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 代码块复制功能 -->
+  <script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+  <script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+</html>

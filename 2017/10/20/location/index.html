@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JavaScript,JS-SDK,WebService API,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文主要介绍微信公众号开发利用JS-SDK和WebService API如何定位到当前城市。">
+<meta name="keywords" content="JavaScript,JS-SDK,WebService API">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信公众号开发城市定位使用攻略">
+<meta property="og:url" content="http://yoursite.com/2017/10/20/location/index.html">
+<meta property="og:site_name" content="OnlyloveaCat">
+<meta property="og:description" content="本文主要介绍微信公众号开发利用JS-SDK和WebService API如何定位到当前城市。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-04-16T11:24:08.692Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微信公众号开发城市定位使用攻略">
+<meta name="twitter:description" content="本文主要介绍微信公众号开发利用JS-SDK和WebService API如何定位到当前城市。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/20/location/">
+
+
+
+
+
+  <title>微信公众号开发城市定位使用攻略 | OnlyloveaCat</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">OnlyloveaCat</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/20/location/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="OnlyloveaCat">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/logo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OnlyloveaCat">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">微信公众号开发城市定位使用攻略</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-20T00:00:00+08:00">
+                2017-10-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JS-SDK/" itemprop="url" rel="index">
+                    <span itemprop="name">JS-SDK</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">本文阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文主要介绍微信公众号开发利用JS-SDK和WebService API如何定位到当前城市。<br><a id="more"></a></p>
+<h3 id="1调用JS-SDK定位功能-获取当前经纬度"><a href="#1调用JS-SDK定位功能-获取当前经纬度" class="headerlink" title="1调用JS-SDK定位功能,获取当前经纬度"></a>1调用JS-SDK定位功能,获取当前经纬度</h3><h4 id="引入JS-SDK的JS文件"><a href="#引入JS-SDK的JS文件" class="headerlink" title="引入JS-SDK的JS文件"></a>引入JS-SDK的JS文件</h4><p><a href="http://res.wx.qq.com/open/js/jweixin-1.2.0.js(支持https)" target="_blank" rel="noopener">http://res.wx.qq.com/open/js/jweixin-1.2.0.js(支持https)</a></p>
+<h4 id="通过config接口注入权限验证配置"><a href="#通过config接口注入权限验证配置" class="headerlink" title="通过config接口注入权限验证配置"></a>通过config接口注入权限验证配置</h4><p>所有需要使用JS-SDK的页面必须先注入配置信息，否则将无法调用</p>
+<p>代码如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wx.config(&#123;</span><br><span class="line">    debug: <span class="literal">true</span>, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过<span class="built_in">log</span>打出，仅在pc端时才会打印。</span><br><span class="line">    appId: <span class="string">''</span>, // 必填，企业号的唯一标识，此处填写企业号corpid(注册公众号自动生成的appId)</span><br><span class="line">    timestamp: , // 必填，生成签名的时间戳</span><br><span class="line">    nonceStr: <span class="string">''</span>, // 必填，生成签名的随机串</span><br><span class="line">    signature: <span class="string">''</span>,// 必填，签名，见附录1</span><br><span class="line">    jsApiList: [<span class="string">'getLocation'</span>] // 必填，需要使用的JS接口列表，所有JS接口列表见附录3(这里我只填了获取经纬度的JS接口)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>timestamp,nonceStr,signature,jsApiList全部由后台生成</p>
+<h4 id="通过ready接口处理成功验证"><a href="#通过ready接口处理成功验证" class="headerlink" title="通过ready接口处理成功验证"></a>通过ready接口处理成功验证</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wx.ready(<span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line">    //你的代码</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="通过error接口处理失败验证"><a href="#通过error接口处理失败验证" class="headerlink" title="通过error接口处理失败验证"></a>通过error接口处理失败验证</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wx.error(<span class="keyword">function</span>(res)&#123;</span><br><span class="line">    //你的代码</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="获取经纬度"><a href="#获取经纬度" class="headerlink" title="获取经纬度"></a>获取经纬度</h4><p>代码如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">wx.getLocation(&#123;</span><br><span class="line">   <span class="built_in">type</span>: <span class="string">'wgs84'</span>, // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入<span class="string">'gcj02'</span></span><br><span class="line">       success: <span class="keyword">function</span> (res) &#123;</span><br><span class="line">       var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90</span><br><span class="line">       var longitude = res.longitude ; // 经度，浮点数，范围为180 ~ -180。</span><br><span class="line">       var speed = res.speed; // 速度，以米/每秒计</span><br><span class="line">       var accuracy = res.accuracy; // 位置精度</span><br><span class="line">   &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="2解析经纬度-获取城市信息"><a href="#2解析经纬度-获取城市信息" class="headerlink" title="2解析经纬度,获取城市信息"></a>2解析经纬度,获取城市信息</h3><h4 id="引入API服务JS"><a href="#引入API服务JS" class="headerlink" title="引入API服务JS"></a>引入API服务JS</h4><p><a href="http://map.qq.com/api/js?v=2.exp&amp;key=YOUR_KEY(支持https)" target="_blank" rel="noopener">http://map.qq.com/api/js?v=2.exp&amp;key=YOUR_KEY(支持https)</a><br>其中，v参数是引用的版本号，目前腾讯地图提供两个版本，分别是v=1，v=2.exp，推荐使用2.exp，可以获得最新最快的支持。Key参数YOUR_KEY是Key鉴权中申请的key。(申请地址:<a href="http://lbs.qq.com/key.html" target="_blank" rel="noopener">http://lbs.qq.com/key.html</a>)</p>
+<h4 id="逆地址解析"><a href="#逆地址解析" class="headerlink" title="逆地址解析"></a>逆地址解析</h4><p>代码如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var geocoder = new qq.maps.Geocoder(&#123;</span><br><span class="line">    complete:<span class="keyword">function</span>(result)&#123;</span><br><span class="line">        <span class="built_in">return</span> result.detail.addressComponents.city;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">var coord=new qq.maps.LatLng(经度,纬度);</span><br><span class="line">geocoder.getAddress(coord);</span><br></pre></td></tr></table></figure>
+<h3 id="3使用腾讯地图API，通过地名获取经纬度"><a href="#3使用腾讯地图API，通过地名获取经纬度" class="headerlink" title="3使用腾讯地图API，通过地名获取经纬度"></a>3使用腾讯地图API，通过地名获取经纬度</h3><h4 id="地址解析"><a href="#地址解析" class="headerlink" title="地址解析"></a>地址解析</h4><p>代码如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var callbacks=&#123;</span><br><span class="line">    complete:<span class="keyword">function</span>(results)&#123;</span><br><span class="line">        console.log(results);</span><br><span class="line">        results.detail.location.lat, // 纬度，浮点数，范围为90 ~ -90</span><br><span class="line">        results.detail.location.lng, // 经度，浮点数，范围为180 ~ -180。</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">var geocoder = new qq.maps.Geocoder(callbacks);</span><br><span class="line">geocoder.getLocation(app.address);</span><br></pre></td></tr></table></figure>
+<h3 id="4调用微信内置地图，定位目标点"><a href="#4调用微信内置地图，定位目标点" class="headerlink" title="4调用微信内置地图，定位目标点"></a>4调用微信内置地图，定位目标点</h3><h4 id="查看地图"><a href="#查看地图" class="headerlink" title="查看地图"></a>查看地图</h4><p>代码如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wx.openLocation(&#123;</span><br><span class="line">    latitude: 0, // 纬度，浮点数，范围为90 ~ -90</span><br><span class="line">    longitude: 0, // 经度，浮点数，范围为180 ~ -180。</span><br><span class="line">    name: <span class="string">''</span>, // 位置名</span><br><span class="line">    address: <span class="string">''</span>, // 地址详情说明</span><br><span class="line">    scale: 1, // 地图缩放级别,整形值,范围从1~28。默认为最大</span><br><span class="line">    infoUrl: <span class="string">''</span> // 在查看位置界面底部显示的超链接,可点击跳转</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>扫一扫，请老师喝水</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wx.jpg" alt="OnlyloveaCat 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/zfb.jpg" alt="OnlyloveaCat 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/JS-SDK/" rel="tag"># JS-SDK</a>
+          
+            <a href="/tags/WebService-API/" rel="tag"># WebService API</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/18/attribute/" rel="next" title="jQuery中attr()和prop()的区别">
+                <i class="fa fa-chevron-left"></i> jQuery中attr()和prop()的区别
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/20/canvas/" rel="prev" title="使用html2canvas时图片跨域问题的解决方法">
+                使用html2canvas时图片跨域问题的解决方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/logo.jpg" alt="OnlyloveaCat">
+            
+              <p class="site-author-name" itemprop="name">OnlyloveaCat</p>
+              <p class="site-description motion-element" itemprop="description">不求闻达于诸侯</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/OnlyloveaCat" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1调用JS-SDK定位功能-获取当前经纬度"><span class="nav-number">1.</span> <span class="nav-text">1调用JS-SDK定位功能,获取当前经纬度</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#引入JS-SDK的JS文件"><span class="nav-number">1.1.</span> <span class="nav-text">引入JS-SDK的JS文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#通过config接口注入权限验证配置"><span class="nav-number">1.2.</span> <span class="nav-text">通过config接口注入权限验证配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#通过ready接口处理成功验证"><span class="nav-number">1.3.</span> <span class="nav-text">通过ready接口处理成功验证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#通过error接口处理失败验证"><span class="nav-number">1.4.</span> <span class="nav-text">通过error接口处理失败验证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#获取经纬度"><span class="nav-number">1.5.</span> <span class="nav-text">获取经纬度</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2解析经纬度-获取城市信息"><span class="nav-number">2.</span> <span class="nav-text">2解析经纬度,获取城市信息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#引入API服务JS"><span class="nav-number">2.1.</span> <span class="nav-text">引入API服务JS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#逆地址解析"><span class="nav-number">2.2.</span> <span class="nav-text">逆地址解析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3使用腾讯地图API，通过地名获取经纬度"><span class="nav-number">3.</span> <span class="nav-text">3使用腾讯地图API，通过地名获取经纬度</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#地址解析"><span class="nav-number">3.1.</span> <span class="nav-text">地址解析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4调用微信内置地图，定位目标点"><span class="nav-number">4.</span> <span class="nav-text">4调用微信内置地图，定位目标点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查看地图"><span class="nav-number">4.1.</span> <span class="nav-text">查看地图</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">OnlyloveaCat</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+    <span class="site-uv">
+      本站访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 代码块复制功能 -->
+  <script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+  <script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+</html>
